@@ -49,6 +49,9 @@ export default function UserServers() {
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-medium text-xl">My Servers</h2>
       </div>
+      {serverObjects.length === 0 && (
+        <p>Add your favorite servers to check them at a glimpse</p>
+      )}
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-4">
         {serverObjects.map((server) => (
           <ServerInfoCardSmall
