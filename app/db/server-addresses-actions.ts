@@ -34,9 +34,10 @@ const addServerAddress = async (serverAddress: string) => {
     throw new Error("User not authenticated");
   }
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("server_addresses")
-    .insert([{ user_id: user.id, server_address: serverAddress }]);
+    .insert([{ user_id: user.id, server_address: serverAddress }])
+    .select(); // Use select() to return the inserted data
 
   console.log(serverAddress);
 
@@ -45,7 +46,8 @@ const addServerAddress = async (serverAddress: string) => {
     throw new Error("Could not add server address");
   }
 
-  return { message: "Server address added successfully" };
+  // Return the ID of the newly created server address
+  return { message: "Server address added successfully", id: data[0].id };
 };
 
 // Function to delete a server address

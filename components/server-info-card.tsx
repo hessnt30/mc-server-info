@@ -1,7 +1,8 @@
 import { Server } from "@/app/types/server";
 import { Button } from "./ui/button";
 import { addServerAddress } from "@/app/db/server-addresses-actions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useServerContext } from "@/app/context/server-context";
 
 type ServerInfoCardProps = {
   serverInfo: Server;
@@ -12,17 +13,37 @@ export default function ServerInfoCard({
   serverInfo,
   isAuthenticated,
 }: ServerInfoCardProps) {
+  const { handleAdd, serverInList } = useServerContext();
   const [isSaved, setIsSaved] = useState(false);
 
-  const handleSave = () => {
+  useEffect(() => {
+    setIsSaved(serverInList(serverInfo));
+  }, [serverInfo, serverInList]);
+
+  const handleSave = async () => {
     console.log("Save button clicked for server:", serverInfo.host);
+    if (serverInList(serverInfo)) {
+      console.log("Server address already exists.");
+      return;
+    }
+
     if (serverInfo.host) {
+      let id;
       if (serverInfo.port && serverInfo.host === serverInfo.ip) {
-        addServerAddress(`${serverInfo.ip}:${serverInfo.port}`);
+        const result = await addServerAddress(
+          `${serverInfo.ip}:${serverInfo.port}`
+        );
+        id = result.id;
       } else {
-        addServerAddress(serverInfo.host);
+        const result = await addServerAddress(serverInfo.host);
+        id = result.id;
       }
-      setIsSaved(true);
+
+      if (id) {
+        serverInfo.id = id;
+        handleAdd(serverInfo);
+        setIsSaved(true);
+      }
     } else {
       console.log("Error saving, host is undefined");
     }
