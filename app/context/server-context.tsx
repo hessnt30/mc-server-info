@@ -26,8 +26,10 @@ export const ServerProvider: React.FC<{ children: ReactNode }> = ({
 
   const serverInList = (server: Server) => {
     return serverObjects.some((currServer) => {
+      console.log(`new server: ${server.host}:${server.port}`);
+      console.log(`curr server: ${currServer.host}:${currServer.port}`);
       return (
-        `${server.ip}:${server.port}` === `${currServer.ip}:${currServer.port}`
+        `${server.host}:${server.port}` === `${currServer.host}:${currServer.port}`
       );
     });
   };
