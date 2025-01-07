@@ -8,18 +8,21 @@ import { fetchMultipleServersInfo } from "@/app/api/server-info";
 import LoadingSpinner from "./loading-spinner";
 import { deleteServerAddress } from "@/app/db/server-addresses-actions";
 import { Server } from "@/app/types/server";
+import { useServerContext } from "@/app/context/server-context";
 
 export default function UserServers() {
-  const [serverObjects, setServerObjects] = useState<Server[]>([]);
+  // const [serverObjects, setServerObjects] = useState<Server[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const { serverObjects, setServers, handleRemove } = useServerContext();
 
   useEffect(() => {
     const fetchServers = async () => {
       try {
         const userServers = await getUserServerAddresses();
         const serversInfo = await fetchMultipleServersInfo(userServers);
-        setServerObjects(serversInfo);
+        setServers(serversInfo);
       } catch (err) {
         setError("Failed to load servers");
         console.error(err);
@@ -39,9 +42,9 @@ export default function UserServers() {
     return <div className="text-red-600">{error}</div>;
   }
 
-  const handleRemove = async (id: string) => {
+  const removeServer = async (id: string) => {
     await deleteServerAddress(id); // Remove from the database
-    setServerObjects((prev) => prev.filter((server) => server.id !== id)); // Update state to remove the server object
+    handleRemove(id);
   };
 
   return (
@@ -57,7 +60,7 @@ export default function UserServers() {
           <ServerInfoCardSmall
             key={server.id}
             serverInfo={server}
-            onRemove={handleRemove} // Pass the handleRemove function
+            onRemove={removeServer} // Pass the handleRemove function
           />
         ))}
       </div>

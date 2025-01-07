@@ -18,6 +18,7 @@ import { SubmitButton } from "./submit-button";
 import LoadingSpinner from "./loading-spinner";
 import ServerInfoCard from "./server-info-card";
 import { Server } from "@/app/types/server";
+import { useServerContext } from "@/app/context/server-context";
 
 type SearchServerProps = {
   isAuthenticated: boolean;
