@@ -29,7 +29,7 @@ export default function ServerInfoCard({
 
     if (serverInfo.host) {
       let id;
-      if (serverInfo.port && serverInfo.host === serverInfo.ip) {
+      if (serverInfo.port !== "25565") {
         const result = await addServerAddress(
           `${serverInfo.ip}:${serverInfo.port}`
         );

@@ -16,7 +16,7 @@ export const fetchServerInfo = async (
     const serverInfo = {
       id,
       ip: data?.ip_address,
-      port: data?.port,
+      port: data?.port.toString(),
       host: data?.host,
       icon: data?.icon,
       motd: data.motd?.clean,
