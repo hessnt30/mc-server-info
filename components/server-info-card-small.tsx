@@ -49,7 +49,7 @@ export default function ServerInfoCardSmall({
           {/* Top right */}
           <div className="ml-4">
             <div className="flex-grow">
-              <h3 className="text-md font-bold truncate">{serverInfo.host}</h3>
+              <h3 className="text-md font-bold truncate">{`${serverInfo.host}${serverInfo.port !== "25565" ? ":" + serverInfo.port : ""}`}</h3>
               <p className="text-xs">{serverInfo.version}</p>
               <p className="text-xs">
                 {serverInfo.numPlayersOnline}/{serverInfo.maxPlayers} players
